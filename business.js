@@ -4,61 +4,61 @@
   const roles = [
     [
       "factory",
-      b("Tai Po Chun Hing", "大埔振兴牛丸"),
-      b("Proposed manufacturer", "拟议生产方"),
+      b("Tai Po Chun Hing", "大埔振興牛丸"),
+      b("Proposed manufacturer", "擬議生產方"),
       [
-        b("Product development", "产品研发"),
-        b("Production", "生产"),
-        b("Quality control", "质量控制"),
-        b("Packaging", "包装"),
-        b("Cold-chain distribution", "冷链配送"),
+        b("Product development", "產品研發"),
+        b("Production", "生產"),
+        b("Quality control", "質量控制"),
+        b("Packaging", "包裝"),
+        b("Cold-chain distribution", "冷鏈配送"),
       ],
     ],
     [
       "bar",
       b("Partner bars", "合作酒吧"),
-      b("Proposed service partners", "拟议供应伙伴"),
+      b("Proposed service partners", "擬議供應夥伴"),
       [
-        b("Product ordering", "订货"),
-        b("Reheating and serving", "翻热与供应"),
-        b("Customer promotion", "顾客推广"),
-        b("Sales", "销售"),
-        b("Feedback collection", "收集反馈"),
+        b("Product ordering", "訂貨"),
+        b("Reheating and serving", "翻熱與供應"),
+        b("Customer promotion", "顧客推廣"),
+        b("Sales", "銷售"),
+        b("Feedback collection", "收集反饋"),
       ],
     ],
     [
       "people",
-      b("Consumers", "成年消费者"),
-      b("Intended customer experience", "预期顾客体验"),
+      b("Consumers", "成年消費者"),
+      b("Intended customer experience", "預期顧客體驗"),
       [
-        b("Innovative Hong Kong snacks", "创新港式小食"),
+        b("Innovative Hong Kong snacks", "創新港式小食"),
         b("Convenient portions", "便捷份量"),
         b("Distinctive flavours", "特色口味"),
-        b("New nightlife food experiences", "新的夜生活饮食体验"),
+        b("New nightlife food experiences", "新的夜生活飲食體驗"),
       ],
     ],
   ];
   let role = 0;
   const inputs = [
-    ["retail", b("Retail price / serving (HK$)", "每份零售价（HK$）"), false],
+    ["retail", b("Retail price / serving (HK$)", "每份零售價（HK$）"), false],
     [
       "wholesale",
-      b("Wholesale price / serving (HK$)", "每份批发价（HK$）"),
+      b("Wholesale price / serving (HK$)", "每份批發價（HK$）"),
       false,
     ],
     [
       "production",
-      b("Production cost / serving (HK$)", "每份生产成本（HK$）"),
+      b("Production cost / serving (HK$)", "每份生產成本（HK$）"),
       false,
     ],
     [
       "serving",
-      b("Bar serving cost / portion (HK$)", "酒吧每份供应成本（HK$）"),
+      b("Bar serving cost / portion (HK$)", "酒吧每份供應成本（HK$）"),
       false,
     ],
-    ["daily", b("Daily servings per bar", "每家酒吧日销量（份）"), true],
-    ["bars", b("Number of partner bars", "合作酒吧数量"), true],
-    ["days", b("Operating days / month", "每月营业日数"), true],
+    ["daily", b("Daily servings per bar", "每家酒吧日銷量（份）"), true],
+    ["bars", b("Number of partner bars", "合作酒吧數量"), true],
+    ["days", b("Operating days / month", "每月營業日數"), true],
   ];
   const scenarios = {
     conservative: {
@@ -91,8 +91,8 @@
   };
   const sNames = {
     conservative: b("Conservative", "保守"),
-    base: b("Base", "基础"),
-    optimistic: b("Optimistic", "乐观"),
+    base: b("Base", "基礎"),
+    optimistic: b("Optimistic", "樂觀"),
   };
   let scenario = "base";
   function calc(a) {
@@ -133,25 +133,25 @@
           (id === "days" && a[id] > 31),
       )
     ) {
-      return `<p class="fine">${t("Enter a non-negative value in each field. Counts must be whole numbers and operating days cannot exceed 31.", "每栏须输入非负数。数量须为整数，每月营业日数最多 31 天。")}</p>`;
+      return `<p class="fine">${t("Enter a non-negative value in each field. Counts must be whole numbers and operating days cannot exceed 31.", "每欄須輸入非負數。數量須為整數，每月營業日數最多 31 天。")}</p>`;
     }
     const v = calc(a),
       pct = (n) => (n === null ? "—" : n.toFixed(1) + "%");
     const metrics = [
-      [t("Manufacturer revenue", "厂家收入"), currency(v.revenue)],
-      [t("Manufacturer gross profit", "厂家毛利"), currency(v.mp)],
+      [t("Manufacturer revenue", "廠家收入"), currency(v.revenue)],
+      [t("Manufacturer gross profit", "廠家毛利"), currency(v.mp)],
       [t("Bar gross profit · all bars", "所有酒吧毛利"), currency(v.bp)],
       [
-        t("Monthly sales volume", "每月销量"),
+        t("Monthly sales volume", "每月銷量"),
         v.volume.toLocaleString() + " " + t("servings", "份"),
       ],
-      [t("Manufacturer gross margin", "厂家毛利率"), pct(v.mMargin)],
+      [t("Manufacturer gross margin", "廠家毛利率"), pct(v.mMargin)],
       [t("Bar gross margin", "酒吧毛利率"), pct(v.bMargin)],
     ];
     return `<div class="profits">${metrics.map(([n, val]) => `<div class="metric"><span>${n}</span><b>${val}</b></div>`).join("")}</div>`;
   }
   function calculator() {
-    return `<p class="subcopy">${t("Choose a scenario and edit its assumptions. All totals are monthly. Bar profit includes the additional cost of serving each portion.", "选择情景并调整假设。结果按月计算，酒吧毛利已扣除每份额外供应成本。")}</p><div class="segments">${Object.keys(
+    return `<p class="subcopy">${t("Choose a scenario and edit its assumptions. All totals are monthly. Bar profit includes the additional cost of serving each portion.", "選擇情景並調整假設。結果按月計算，酒吧毛利已扣除每份額外供應成本。")}</p><div class="segments">${Object.keys(
       scenarios,
     )
       .map(
@@ -160,27 +160,27 @@
       )
       .join(
         "",
-      )}</div><div class="two-col mt"><div class="fields">${inputs.map(([id, label, int]) => `<label class="field">${txt(label)}<input id="calc-${id}" type="number" min="0" ${id === "days" ? 'max="31"' : ""} step="${int ? "1" : ".01"}" value="${scenarios[scenario][id]}"></label>`).join("")}</div><div><div id="profit-output" aria-live="polite">${profits()}</div><p class="fine mt">${t("Illustrative Financial Estimates — Not Actual Business Performance", "示例财务估算 · 不代表实际商业表现")}</p></div></div><details class="fine mt"><summary>${t("Calculation method", "计算方式")}</summary><p class="mt">${t("Volume = daily sales × bars × days. Manufacturer revenue = wholesale price × volume. Manufacturer gross profit = (wholesale price − production cost) × volume. Bar gross profit = (retail price − wholesale price − serving cost) × volume. Each gross margin divides that party’s gross profit by its own sales revenue. Rent, labour and fixed costs are excluded.", "总销量 = 每日销量 × 酒吧数 × 营业日数。厂家收入 = 批发价 × 总销量。厂家毛利 =（批发价 − 生产成本）× 总销量。酒吧毛利 =（零售价 − 批发价 − 供应成本）× 总销量。各方毛利率 = 各方毛利 ÷ 各自销售收入。估算未计租金、人工及固定成本。")}</p></details>`;
+      )}</div><div class="two-col mt"><div class="fields">${inputs.map(([id, label, int]) => `<label class="field">${txt(label)}<input id="calc-${id}" type="number" min="0" ${id === "days" ? 'max="31"' : ""} step="${int ? "1" : ".01"}" value="${scenarios[scenario][id]}"></label>`).join("")}</div><div><div id="profit-output" aria-live="polite">${profits()}</div><p class="fine mt">${t("Illustrative Financial Estimates — Not Actual Business Performance", "示例財務估算 · 不代表實際商業表現")}</p></div></div><details class="fine mt"><summary>${t("Calculation method", "計算方式")}</summary><p class="mt">${t("Volume = daily sales × bars × days. Manufacturer revenue = wholesale price × volume. Manufacturer gross profit = (wholesale price − production cost) × volume. Bar gross profit = (retail price − wholesale price − serving cost) × volume. Each gross margin divides that party’s gross profit by its own sales revenue. Rent, labour and fixed costs are excluded.", "總銷量 = 每日銷量 × 酒吧數 × 營業日數。廠家收入 = 批發價 × 總銷量。廠家毛利 =（批發價 − 生產成本）× 總銷量。酒吧毛利 =（零售價 − 批發價 − 供應成本）× 總銷量。各方毛利率 = 各方毛利 ÷ 各自銷售收入。估算未計租金、人工及固定成本。")}</p></details>`;
   }
   const scoreFields = [
     ["taste", b("Taste", "味道")],
     ["texture", b("Texture", "口感")],
-    ["aroma", b("Aroma", "香气")],
-    ["purchase", b("Purchase intention", "购买意愿")],
-    ["overall", b("Overall satisfaction", "整体满意度")],
+    ["aroma", b("Aroma", "香氣")],
+    ["purchase", b("Purchase intention", "購買意願")],
+    ["overall", b("Overall satisfaction", "整體滿意度")],
   ];
   const pilots = [
     b(
       "Compare preferences and acceptance in an alcohol-free tasting with 20–30 adults.",
-      "邀请 20–30 名成年人参加不涉及饮酒的试食，比较接受度与偏好。",
+      "邀請 20–30 名成年人蔘加不涉及飲酒的試食，比較接受度與偏好。",
     ),
     b(
       "Test willingness to pay and how easily bar staff can reheat and serve each cup.",
-      "研究价格接受程度，并观察酒吧员工翻热和出餐的便利性。",
+      "研究價格接受程度，並觀察酒吧員工翻熱和出餐的便利性。",
     ),
     b(
       "Review measured costs, margins and feedback before the next recipe iteration.",
-      "整理实际成本、毛利和反馈，再修订下一版配方。",
+      "整理實際成本、毛利和反饋，再修訂下一版配方。",
     ),
   ];
   const validScore = (n) => Number.isInteger(n) && n >= 1 && n <= 5;
@@ -214,8 +214,8 @@
   function chart() {
     const rated = AH.products.filter((p) => records[p.id]);
     if (!rated.length)
-      return `<p class="fine mt">${t("Your chart appears after you save a tasting.", "保存第一项试食评分后，这里会显示图表。")}</p>`;
-    return `<p class="fine">${t("Mean of your five scores per saved product, out of 5.", "每款已保存产品五项评分的平均分，满分 5 分。")}</p>${rated
+      return `<p class="fine mt">${t("Your chart appears after you save a tasting.", "保存第一項試食評分後，這裏會顯示圖表。")}</p>`;
+    return `<p class="fine">${t("Mean of your five scores per saved product, out of 5.", "每款已保存產品五項評分的平均分，滿分 5 分。")}</p>${rated
       .map((p) => {
         const n =
           scoreFields.reduce((a, [k]) => a + records[p.id].scores[k], 0) / 5;
@@ -225,28 +225,28 @@
   }
   function tasting() {
     const d = draft();
-    return `<div class="two-col"><div><p class="subcopy">${t("Proposed four-week pilot", "拟议四星期试点")}</p><ul>${pilots.map((x) => `<li>${txt(x)}</li>`).join("")}</ul></div><div class="results"><h4>${t("Your tasting notebook", "个人试食记录")}</h4><p class="fine">${t("Record one tasting per product on this device. Saving again updates that product. Your chart contains only your saved ratings.", "每款产品可在本机保存一条试食记录，再次保存会更新该款记录。图表仅使用你已保存的评分。")}</p></div></div><div class="two-col mt"><div>${AH.field(
-      t("Product to rate", "选择评分产品"),
+    return `<div class="two-col"><div><p class="subcopy">${t("Proposed four-week pilot", "擬議四星期試點")}</p><ul>${pilots.map((x) => `<li>${txt(x)}</li>`).join("")}</ul></div><div class="results"><h4>${t("Your tasting notebook", "個人試食記錄")}</h4><p class="fine">${t("Record one tasting per product on this device. Saving again updates that product. Your chart contains only your saved ratings.", "每款產品可在本機保存一條試食記錄，再次保存會更新該款記錄。圖表僅使用你已保存的評分。")}</p></div></div><div class="two-col mt"><div>${AH.field(
+      t("Product to rate", "選擇評分產品"),
       "rate-product",
       AH.products.map((p) => [p.id, txt(p.name)]),
       current,
-    )}<div class="mt">${scoreFields.map(([key, label]) => `<div class="rating-line" role="group" aria-label="${txt(label)}"><span>${txt(label)}</span><div class="score-options">${[1, 2, 3, 4, 5].map((n) => `<button data-score="${key}" data-value="${n}" aria-label="${txt(label)} ${n}/5" aria-pressed="${d.scores[key] === n}">${n}</button>`).join("")}</div></div>`).join("")}</div><label class="field mt">${t("Suggested price per serving (HK$)", "建议每份售价（HK$）")}<input id="rate-price" type="number" min="0" step=".01" value="${esc(d.price)}"></label><label class="field mt">${t("Tasting notes", "试食反馈")}<textarea id="rate-feedback" maxlength="1500">${esc(d.feedback)}</textarea></label><button id="rate-save" class="btn primary mt">${t("Save my rating", "保存我的评分")}</button><div id="rate-status" class="fine mt" role="status"></div></div><div><div class="results"><h3>${t("My tasting results", "我的试食结果")}</h3><div id="chart" class="mt">${chart()}</div></div><div class="mt">${AH.field(t("My favourite product", "我最喜欢的产品"), "rate-fav", [["", t("Choose a favourite", "选择最喜欢的产品")], ...AH.products.map((p) => [p.id, txt(p.name)])], fav)}</div><div class="actions mt"><button class="btn" id="rate-export" ${Object.keys(records).length || fav ? "" : "disabled"}>${t("Export results", "导出结果")}</button><button class="btn" id="rate-reset" ${Object.keys(records).length || fav ? "" : "disabled"}>${t("Reset results", "重置结果")}</button></div>${confirming ? `<div class="results mt"><p>${t("Clear all tasting ratings and your favourite from this browser?", "清除当前浏览器内的所有试食评分及最爱产品？")}</p><div class="actions mt"><button id="rate-cancel" class="btn">${t("Keep results", "保留记录")}</button><button id="rate-clear" class="btn primary">${t("Clear tasting results", "确认清除试食记录")}</button></div></div>` : ""}</div></div>`;
+    )}<div class="mt">${scoreFields.map(([key, label]) => `<div class="rating-line" role="group" aria-label="${txt(label)}"><span>${txt(label)}</span><div class="score-options">${[1, 2, 3, 4, 5].map((n) => `<button data-score="${key}" data-value="${n}" aria-label="${txt(label)} ${n}/5" aria-pressed="${d.scores[key] === n}">${n}</button>`).join("")}</div></div>`).join("")}</div><label class="field mt">${t("Suggested price per serving (HK$)", "建議每份售價（HK$）")}<input id="rate-price" type="number" min="0" step=".01" value="${esc(d.price)}"></label><label class="field mt">${t("Tasting notes", "試食反饋")}<textarea id="rate-feedback" maxlength="1500">${esc(d.feedback)}</textarea></label><button id="rate-save" class="btn primary mt">${t("Save my rating", "保存我的評分")}</button><div id="rate-status" class="fine mt" role="status"></div></div><div><div class="results"><h3>${t("My tasting results", "我的試食結果")}</h3><div id="chart" class="mt">${chart()}</div></div><div class="mt">${AH.field(t("My favourite product", "我最喜歡的產品"), "rate-fav", [["", t("Choose a favourite", "選擇最喜歡的產品")], ...AH.products.map((p) => [p.id, txt(p.name)])], fav)}</div><div class="actions mt"><button class="btn" id="rate-export" ${Object.keys(records).length || fav ? "" : "disabled"}>${t("Export results", "導出結果")}</button><button class="btn" id="rate-reset" ${Object.keys(records).length || fav ? "" : "disabled"}>${t("Reset results", "重置結果")}</button></div>${confirming ? `<div class="results mt"><p>${t("Clear all tasting ratings and your favourite from this browser?", "清除當前瀏覽器內的所有試食評分及最愛產品？")}</p><div class="actions mt"><button id="rate-cancel" class="btn">${t("Keep results", "保留記錄")}</button><button id="rate-clear" class="btn primary">${t("Clear tasting results", "確認清除試食記錄")}</button></div></div>` : ""}</div></div>`;
   }
   const refreshTasting = () => {
     document.querySelector("#tasting .tool-content").innerHTML = tasting();
   };
   AH.businessPage = () =>
-    `<section class="section business" id="business"><div class="wrap"><div class="kicker">${t("Bar Collaboration", "酒吧合作")}</div><div class="section-head"><h2>${t("From traditional food<br>to nightlife culture", "从传统食品走进夜生活")}</h2><p>${t("A proposed B2B2C pilot would connect Tai Po Chun Hing’s beef ball development with bars serving young adults. Bars could expand their snack menus and return direct tasting feedback to the maker.", "拟议的 B2B2C 试点将大埔振兴的牛丸研发能力与面向年轻成年人的酒吧连接。酒吧可丰富小食选择，并把顾客的试食意见带回研发环节。")}</p></div><h3>${t("The proposed supply chain", "拟议合作流程")}</h3><div class="flow">${roles.map((r, i) => `<button data-role="${i}" aria-pressed="${role === i}">${icon(r[0], 25)}${txt(r[1])}</button>`).join("")}</div><div id="role-detail" class="flow-detail" aria-live="polite">${roleDetail()}</div><h3>${t("Pilot assumptions", "试点假设")}</h3><div class="assumptions">${[
+    `<section class="section business" id="business"><div class="wrap"><div class="kicker">${t("Bar Collaboration", "酒吧合作")}</div><div class="section-head"><h2>${t("From traditional food<br>to nightlife culture", "從傳統食品走進夜生活")}</h2><p>${t("A proposed B2B2C pilot would connect Tai Po Chun Hing’s beef ball development with bars serving young adults. Bars could expand their snack menus and return direct tasting feedback to the maker.", "擬議的 B2B2C 試點將大埔振興的牛丸研發能力與面向年輕成年人的酒吧連接。酒吧可豐富小食選擇，並把顧客的試食意見帶回研發環節。")}</p></div><h3>${t("The proposed supply chain", "擬議合作流程")}</h3><div class="flow">${roles.map((r, i) => `<button data-role="${i}" aria-pressed="${role === i}">${icon(r[0], 25)}${txt(r[1])}</button>`).join("")}</div><div id="role-detail" class="flow-detail" aria-live="polite">${roleDetail()}</div><h3>${t("Pilot assumptions", "試點假設")}</h3><div class="assumptions">${[
       ["4 " + t("beef balls", "粒牛丸"), t("Per serving", "每份份量")],
-      ["HK$38–48", t("Retail / serving", "每份零售价")],
-      ["HK$20–25", t("Wholesale / serving", "每份批发价")],
-      ["2–3", t("Proposed pilot bars", "拟议试点酒吧")],
-      ["4 " + t("weeks", "星期"), t("Pilot duration", "试点周期")],
+      ["HK$38–48", t("Retail / serving", "每份零售價")],
+      ["HK$20–25", t("Wholesale / serving", "每份批發價")],
+      ["2–3", t("Proposed pilot bars", "擬議試點酒吧")],
+      ["4 " + t("weeks", "星期"), t("Pilot duration", "試點週期")],
     ]
       .map(([v, n]) => `<div><strong>${v}</strong><span>${n}</span></div>`)
       .join(
         "",
-      )}</div><p class="fine">${t("These are unverified planning assumptions. Partner agreements, actual costs and market demand remain to be validated.", "以上均为初步商业假设。合作协议、实际成本和市场需求仍待验证。")}</p>${AH.toolbox("calculator", "calc", t("Interactive profit calculator", "互动利润计算器"), calculator())}${AH.toolbox("tasting", "star", t("Test before we launch", "上市前试食验证"), tasting())}</div></section>`;
+      )}</div><p class="fine">${t("These are unverified planning assumptions. Partner agreements, actual costs and market demand remain to be validated.", "以上均為初步商業假設。合作協議、實際成本和市場需求仍待驗證。")}</p>${AH.toolbox("calculator", "calc", t("Interactive profit calculator", "互動利潤計算器"), calculator())}${AH.toolbox("tasting", "star", t("Test before we launch", "上市前試食驗證"), tasting())}</div></section>`;
   AH.businessClick = (el) => {
     if (el.dataset.role !== undefined) {
       role = +el.dataset.role;
@@ -279,7 +279,7 @@
       if (!validRecord(d)) {
         document.querySelector("#rate-status").textContent = t(
           "Give all five scores and enter a non-negative price, or leave the price blank.",
-          "请完成五项评分。建议售价可留空，填写时须为非负数。",
+          "請完成五項評分。建議售價可留空，填寫時須為非負數。",
         );
         return;
       }
@@ -288,8 +288,8 @@
       refreshTasting();
       AH.toast(
         ok
-          ? t("Tasting saved.", "试食评分已保存。")
-          : t("Saved for this visit only.", "试食评分暂存于本次访问。"),
+          ? t("Tasting saved.", "試食評分已保存。")
+          : t("Saved for this visit only.", "試食評分暫存於本次訪問。"),
       );
       return;
     }
@@ -329,7 +329,7 @@
       AH.save("tasting", {});
       AH.save("favourite", "");
       refreshTasting();
-      AH.toast(t("Local tasting results cleared.", "本地试食记录已清除。"));
+      AH.toast(t("Local tasting results cleared.", "本地試食記錄已清除。"));
     }
   };
   AH.businessInput = (el) => {
@@ -352,7 +352,7 @@
           !Object.keys(records).length && !fav;
       if (!ok)
         AH.toast(
-          t("Favourite stored for this visit.", "最爱产品暂存于本次访问。"),
+          t("Favourite stored for this visit.", "最愛產品暫存於本次訪問。"),
         );
       return;
     }

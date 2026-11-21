@@ -4,28 +4,28 @@
   const room = document.getElementById("tasting-room");
   const notes = {
     cheese: {
-      title: b("Pull apart", "拉开芝士"),
+      title: b("Pull apart", "拉開芝士"),
       description: b(
         "A springy beef shell holds the molten cheese. The seal is the part to test during reheating.",
-        "弹牙牛丸包住流心芝士，翻热试验要观察封口能否留住内馅。",
+        "彈牙牛丸包住流心芝士，翻熱試驗要觀察封口能否留住內餡。",
       ),
       x: 50,
       y: 46,
     },
     honey: {
-      title: b("Follow the glaze", "看看挂汁"),
+      title: b("Follow the glaze", "看看掛汁"),
       description: b(
         "Honey and soy should coat the skewer in a thin layer. Adjusting their ratio changes both sweetness and cling.",
-        "蜜糖酱油要薄薄挂在串上；两者的比例同时影响甜度和挂汁效果。",
+        "蜜糖醬油要薄薄掛在串上；兩者的比例同時影響甜度和掛汁效果。",
       ),
       x: 54,
       y: 54,
     },
     ginger: {
-      title: b("Look into the broth", "看清汤底"),
+      title: b("Look into the broth", "看清湯底"),
       description: b(
         "Daikon brings gentle sweetness to a clear ginger broth. A tasting trial can compare different ginger strengths.",
-        "白萝卜的清甜衬托姜香，可通过试食比较姜味浓淡。",
+        "白蘿蔔的清甜襯托姜香，可通過試食比較姜味濃淡。",
       ),
       x: 39,
       y: 67,
@@ -34,7 +34,7 @@
       title: b("Explore the sauce", "看看番茄果肉"),
       description: b(
         "Chunks of tomato give the sauce texture. The next trial is finding an acidity that complements the beef.",
-        "保留番茄果肉让酱汁更有层次；下一步试验要找到能衬托牛味的酸度。",
+        "保留番茄果肉讓醬汁更有層次；下一步試驗要找到能襯托牛味的酸度。",
       ),
       x: 51,
       y: 58,
@@ -49,7 +49,7 @@
     const p = product(),
       n = notes[p.id];
     room.querySelector(".scene-body").innerHTML =
-      `<div class="scene-image" data-scene="${p.id}"><img src="assets/${p.id}.webp" alt="${txt(p.name)}" draggable="false"><button type="button" class="spot" aria-expanded="false" aria-controls="scene-note" style="left:${n.x}%;top:${n.y}%"><span aria-hidden="true">+</span> ${txt(n.title)}</button><p id="scene-note" class="scene-note" hidden>${txt(n.description)}</p><small class="scene-credit">${AH.note()}</small></div><div class="scene-copy"><span class="scene-series">${AH.series(p.series)} ${t("Collection", "系列")}</span><h3>${txt(p.name)}</h3><p>${txt(p.flavour)}</p><button type="button" class="btn primary" id="remix-scene">${icon("lab", 18)}${t("Remix this recipe", "用这款口味调配方")}</button></div>`;
+      `<div class="scene-image" data-scene="${p.id}"><img src="assets/${p.id}.webp" alt="${txt(p.name)}" draggable="false"><button type="button" class="spot" aria-expanded="false" aria-controls="scene-note" style="left:${n.x}%;top:${n.y}%"><span aria-hidden="true">+</span> ${txt(n.title)}</button><p id="scene-note" class="scene-note" hidden>${txt(n.description)}</p><small class="scene-credit">${AH.note()}</small></div><div class="scene-copy"><span class="scene-series">${AH.series(p.series)} ${t("Collection", "系列")}</span><h3>${txt(p.name)}</h3><p>${txt(p.flavour)}</p><button type="button" class="btn primary" id="remix-scene">${icon("lab", 18)}${t("Remix this recipe", "用這款口味調配方")}</button></div>`;
     const selected = room.querySelector(`[data-choice="${index}"]`);
     room
       .querySelectorAll("[data-choice]")
@@ -78,7 +78,7 @@
     gesture = null;
     wheelSum = 0;
     lastWheel = 0;
-    room.innerHTML = `<div class="room-top"><h2 id="room-title">${t("After Hours tasting room", "AFTER HOURS 互动品鉴室")}</h2><button class="round room-close" aria-label="${t("Close tasting room", "关闭品鉴室")}" autofocus>${icon("close", 18)}</button></div><div class="scene-body"></div><div class="room-foot"><div class="room-instructions"><span>${t("Swipe the photo or choose a flavour", "滑动照片，或点选口味")}</span><span class="scene-status" role="status"></span></div><div class="room-choices"><button class="round" data-shift="-1" aria-label="${t("Previous flavour", "上一款口味")}">${icon("prev", 18)}</button>${products.map((p, i) => `<button data-choice="${i}" aria-label="${txt(p.name)}" class="scene-choice"><img src="assets/${p.id}.webp" alt=""><span>${txt(p.short)}</span></button>`).join("")}<button class="round" data-shift="1" aria-label="${t("Next flavour", "下一款口味")}">${icon("next", 18)}</button></div></div>`;
+    room.innerHTML = `<div class="room-top"><h2 id="room-title">${t("After Hours tasting room", "AFTER HOURS 互動品鑑室")}</h2><button class="round room-close" aria-label="${t("Close tasting room", "關閉品鑑室")}" autofocus>${icon("close", 18)}</button></div><div class="scene-body"></div><div class="room-foot"><div class="room-instructions"><span>${t("Swipe the photo or choose a flavour", "滑動照片，或點選口味")}</span><span class="scene-status" role="status"></span></div><div class="room-choices"><button class="round" data-shift="-1" aria-label="${t("Previous flavour", "上一款口味")}">${icon("prev", 18)}</button>${products.map((p, i) => `<button data-choice="${i}" aria-label="${txt(p.name)}" class="scene-choice"><img src="assets/${p.id}.webp" alt=""><span>${txt(p.short)}</span></button>`).join("")}<button class="round" data-shift="1" aria-label="${t("Next flavour", "下一款口味")}">${icon("next", 18)}</button></div></div>`;
     renderScene();
     room.showModal();
     room.scrollTop = 0;

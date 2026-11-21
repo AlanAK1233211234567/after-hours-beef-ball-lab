@@ -71,35 +71,35 @@
     {
       id: "cheese",
       series: "before",
-      name: bilingual("Cheese-filled Beef Balls", "爆浆芝士牛丸"),
-      short: bilingual("Cheese-filled", "爆浆芝士"),
+      name: bilingual("Cheese-filled Beef Balls", "爆漿芝士牛丸"),
+      short: bilingual("Cheese-filled", "爆漿芝士"),
       flavour: bilingual(
         "Rich, milky and savoury with a molten centre.",
-        "奶香浓郁，咸鲜牛丸包裹流心芝士。",
+        "奶香濃郁，鹹鮮牛丸包裹流心芝士。",
       ),
       ingredients: bilingual(
         "Beef ball base and cheese filling.",
-        "传统牛肉丸基底、芝士内馅。",
+        "傳統牛肉丸基底、芝士內餡。",
       ),
       innovation: bilingual(
         "A soft cheese centre inside a springy Hong Kong beef ball.",
-        "将流心芝士包进传统弹牙牛丸。",
+        "將流心芝士包進傳統彈牙牛丸。",
       ),
       audience: bilingual(
         "Adults sharing a snack with friends.",
-        "喜欢与朋友分享小食的成年消费者。",
+        "喜歡與朋友分享小食的成年消費者。",
       ),
       occasion: bilingual(
         "Before Party · bar snacks and social gatherings.",
-        "Before Party · 酒吧小食及朋友聚会。",
+        "Before Party · 酒吧小食及朋友聚會。",
       ),
       format: bilingual(
         "Four warm bites in a sharing cup.",
-        "四粒一杯，可趁热分食。",
+        "四粒一杯，可趁熱分食。",
       ),
       challenge: bilingual(
         "Test filling leakage, heat response, texture and chilled storage stability.",
-        "测试芝士渗漏、加热表现、口感与冷藏稳定性。",
+        "測試芝士滲漏、加熱表現、口感與冷藏穩定性。",
       ),
     },
     {
@@ -109,114 +109,114 @@
       short: bilingual("Honey glazed", "蜜汁"),
       flavour: bilingual(
         "Floral honey sweetness with a savoury soy finish.",
-        "蜂蜜的花香甜味与酱油咸香交织。",
+        "蜂蜜的花香甜味與醬油鹹香交織。",
       ),
       ingredients: bilingual(
         "Beef balls, honey and soy sauce.",
-        "牛丸、蜂蜜、酱油。",
+        "牛丸、蜂蜜、醬油。",
       ),
       innovation: bilingual(
         "A glossy honey–soy glaze clings to each bite.",
-        "蜜糖酱油调成挂汁，包裹每一粒牛丸。",
+        "蜜糖醬油調成掛汁，包裹每一粒牛丸。",
       ),
       audience: bilingual(
         "Adult diners curious about new sweet–savoury flavours.",
-        "愿意尝试甜咸新口味的成年食客。",
+        "願意嘗試甜鹹新口味的成年食客。",
       ),
       occasion: bilingual(
         "Before Party · shared bar tables and gatherings.",
-        "Before Party · 酒吧拼桌与朋友聚会。",
+        "Before Party · 酒吧拼桌與朋友聚會。",
       ),
-      format: bilingual("Skewers or a small takeaway cup.", "串烧或便携小杯。"),
+      format: bilingual("Skewers or a small takeaway cup.", "串燒或便攜小杯。"),
       challenge: bilingual(
         "Tune honey-to-soy ratio, sweetness and glaze viscosity after reheating.",
-        "调整蜂蜜与酱油比例、甜度及翻热后的酱汁黏稠度。",
+        "調整蜂蜜與醬油比例、甜度及翻熱後的醬汁黏稠度。",
       ),
     },
     {
       id: "ginger",
       series: "after",
-      name: bilingual("Ginger Broth Beef Balls", "姜香暖汤牛丸"),
-      short: bilingual("Ginger broth", "姜香暖汤"),
+      name: bilingual("Ginger Broth Beef Balls", "姜香暖湯牛丸"),
+      short: bilingual("Ginger broth", "姜香暖湯"),
       flavour: bilingual(
         "A light savoury broth with a clean ginger warmth.",
-        "清鲜汤底带有温和姜香。",
+        "清鮮湯底帶有温和姜香。",
       ),
       ingredients: bilingual(
         "Beef balls, ginger, clear broth and optional daikon.",
-        "牛丸、生姜、清汤，可搭配白萝卜。",
+        "牛丸、生薑、清湯，可搭配白蘿蔔。",
       ),
       innovation: bilingual(
         "A late-night soup cup built around the traditional springy bite.",
-        "以一杯暖汤衬托牛丸的弹牙口感。",
+        "以一杯暖湯襯托牛丸的彈牙口感。",
       ),
       audience: bilingual(
         "Adults looking for a warm late-night snack.",
-        "想在深夜享用暖汤小食的成年食客。",
+        "想在深夜享用暖湯小食的成年食客。",
       ),
       occasion: bilingual(
         "After Party · a warm bite at the end of an evening.",
-        "After Party · 夜间聚会后的暖心小食。",
+        "After Party · 夜間聚會後的暖心小食。",
       ),
       format: bilingual(
         "A lidded broth cup with a spoon.",
-        "配匙羹的有盖汤杯。",
+        "配匙羹的有蓋湯杯。",
       ),
       challenge: bilingual(
         "Balance ginger strength, broth flavour and beef ball texture after reheating.",
-        "平衡姜味强度、汤底风味及翻热后牛丸的弹性。",
+        "平衡姜味強度、湯底風味及翻熱後牛丸的彈性。",
       ),
     },
     {
       id: "tomato",
       series: "after",
-      name: bilingual("Tomato Beef Balls", "番茄浓香牛丸"),
-      short: bilingual("Tomato", "番茄浓香"),
+      name: bilingual("Tomato Beef Balls", "番茄濃香牛丸"),
+      short: bilingual("Tomato", "番茄濃香"),
       flavour: bilingual(
         "Bright tomato acidity, gentle sweetness and umami.",
-        "番茄酸甜明亮，带有浓郁鲜味。",
+        "番茄酸甜明亮，帶有濃郁鮮味。",
       ),
       ingredients: bilingual(
         "Beef balls and a chunky tomato sauce.",
-        "牛丸、带果肉的番茄酱汁。",
+        "牛丸、帶果肉的番茄醬汁。",
       ),
       innovation: bilingual(
         "A spoonable tomato coating for a portable late-night snack.",
-        "用浓厚番茄酱汁做成方便携带的杯装小食。",
+        "用濃厚番茄醬汁做成方便攜帶的杯裝小食。",
       ),
       audience: bilingual(
         "Adults who enjoy bright flavours on the go.",
-        "喜欢酸甜口味和便携小食的成年食客。",
+        "喜歡酸甜口味和便攜小食的成年食客。",
       ),
       occasion: bilingual(
         "After Party · late-night takeaway or bar service.",
-        "After Party · 深夜外带或酒吧供应。",
+        "After Party · 深夜外帶或酒吧供應。",
       ),
       format: bilingual(
         "A ready-to-serve cup with a pick.",
-        "即食杯装，配小竹签。",
+        "即食杯裝，配小竹籤。",
       ),
       challenge: bilingual(
         "Test acidity, sauce adhesion, packaging and chilled storage stability.",
-        "测试酸度、挂汁效果、包装及冷藏稳定性。",
+        "測試酸度、掛汁效果、包裝及冷藏穩定性。",
       ),
     },
   ];
   A.fields = {
-    flavour: bilingual("Flavour profile", "风味描述"),
+    flavour: bilingual("Flavour profile", "風味描述"),
     ingredients: bilingual("Main ingredients", "主要食材"),
-    innovation: bilingual("Product innovation", "创新特点"),
-    audience: bilingual("Target consumer", "目标消费者"),
-    occasion: bilingual("Consumption occasion", "食用场景"),
-    format: bilingual("Product format", "产品形式"),
-    challenge: bilingual("Development challenges", "研发挑战"),
+    innovation: bilingual("Product innovation", "創新特點"),
+    audience: bilingual("Target consumer", "目標消費者"),
+    occasion: bilingual("Consumption occasion", "食用場景"),
+    format: bilingual("Product format", "產品形式"),
+    challenge: bilingual("Development challenges", "研發挑戰"),
   };
   A.series = (type) =>
     type === "before"
-      ? A.t("Before Party", "聚会前")
-      : A.t("After Party", "聚会后");
+      ? A.t("Before Party", "聚會前")
+      : A.t("After Party", "聚會後");
   A.note = () =>
-    A.t("Concept Visual — Product Under Development", "概念视觉 · 产品研发中");
+    A.t("Concept Visual — Product Under Development", "概念視覺 · 產品研發中");
   A.fact = (label, value) =>
     `<div class="fact"><h4>${label}</h4><p>${value}</p></div>`;
   A.toolbox = (id, icon, title, body) =>
