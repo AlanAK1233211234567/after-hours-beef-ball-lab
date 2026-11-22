@@ -1,3 +1,71 @@
-.project-switch{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding:5px clamp(16px,5.5vw,92px);font:600 13px/1.3 system-ui,sans-serif;letter-spacing:.01em;background:#24221e;color:#ece8df;border-bottom:1px solid #4a4540}
-.project-switch a{padding:6px 12px;border-radius:20px;color:inherit;text-decoration:none;white-space:nowrap}.project-switch a[aria-current=page]{background:#f7f0e4;color:#2d2922}.project-switch a:hover,.project-switch a:focus-visible{text-decoration:underline;text-underline-offset:3px}.project-switch .switch-symbol{margin-right:4px;font-size:16px}.retail .project-switch{background:#e8e7d9;border-color:#cecbb9;color:#314b39}.retail .project-switch [aria-current=page]{background:#214333;color:#fff}
-.top .mainnav.open{top:100%}html{scroll-padding-top:123px}
+.project-switch {
+  --switch-muted: #c0bcb4;
+  --switch-active: #fff8ef;
+  --track: #716862;
+  padding-inline: clamp(16px, 5.5vw, 92px);
+  background: #24221e;
+  border-bottom: 1px solid #4a4540;
+}
+.retail .project-switch {
+  --switch-muted: #546451;
+  --switch-active: #173d2b;
+  --track: #286144;
+  background: #e8e7d9;
+  border-color: #cecbb9;
+}
+.project-switch form { margin: 0; }
+.project-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--switch-muted);
+  font: 500 14px/1.3 system-ui, sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.project-toggle:focus-visible {
+  outline: 2px solid var(--switch-active);
+  outline-offset: 2px;
+}
+.project-toggle[aria-checked="false"] .project-left,
+.project-toggle[aria-checked="true"] .project-right {
+  color: var(--switch-active);
+  font-weight: 700;
+}
+.project-track {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex: none;
+  border: 1px solid #fff5;
+  border-radius: 99px;
+  background: var(--track);
+}
+.project-track::after {
+  content: "";
+  position: absolute;
+  inset: 2px auto auto 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px #0005;
+  transition: transform .15s ease;
+}
+.project-toggle[aria-checked="true"] .project-track::after,
+.project-toggle[aria-checked="false"]:active .project-track::after {
+  transform: translateX(20px);
+}
+.project-toggle[aria-checked="true"]:active .project-track::after {
+  transform: translateX(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-track::after { transition: none; }
+}
+.top .mainnav.open { top: 100%; }
+html { scroll-padding-top: 130px; }
