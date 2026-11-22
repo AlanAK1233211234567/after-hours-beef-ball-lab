@@ -177,21 +177,33 @@ function reunionKit(g){
   badge(g,'團圓孝心禮盒','#851e27','#f3d89d',0,.17,1.794,2.6,.30);
 }
 
-function mount(article){
-  const stage=article.querySelector('.model-stage'), poster=stage.querySelector('img');
+function mount(article, journey=false){
+  const stage=journey?article:article.querySelector('.model-stage'), poster=stage.querySelector('img');
   let renderer;
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true});}catch{return;}
   renderer.toneMapping=T.ACESFilmicToneMapping;
   renderer.toneMappingExposure=1.08;
-  const scene=new T.Scene(), product=new T.Group();
-  scene.add(product);
-  (article.id==='bbq'?skewerKit:reunionKit)(product);
+  const scene=new T.Scene();
+  const models=new Map();
+  let bounds,center,active;
+  function selectModel(id){
+    if(active===id)return;
+    if(active)models.get(active).product.visible=false;
+    if(!models.has(id)){
+      const product=new T.Group();
+      (id==='bbq'?skewerKit:reunionKit)(product);
+      const box=new T.Box3().setFromObject(product);
+      product.position.sub(box.getCenter(new T.Vector3()));
+      product.traverse(part=>{if(part.isMesh){part.castShadow=true;part.receiveShadow=true}});
+      scene.add(product);models.set(id,{product,box});
+    }
+    active=id;
+    const model=models.get(id);
+    model.product.visible=true;bounds=model.box;center=bounds.getCenter(new T.Vector3());
+  }
+  selectModel(journey?'bbq':article.id);
   renderer.shadowMap.enabled=true;
   renderer.shadowMap.type=T.PCFSoftShadowMap;
-  product.traverse(part=>{if(part.isMesh){part.castShadow=true;part.receiveShadow=true}});
-  const bounds=new T.Box3().setFromObject(product);
-  const center=bounds.getCenter(new T.Vector3());
-  product.position.sub(center);
   // Broad studio reflections define the tray lip, foil seals and satin handles.
   const studio=texture(512,256,c=>{
     c.fillStyle='#242327';c.fillRect(0,0,512,256);
@@ -218,7 +230,7 @@ function mount(article){
   const controls=new OrbitControls(camera,canvas);
   controls.enablePan=false; controls.enableZoom=false;controls.rotateSpeed=.78;
   const render=()=>renderer.render(scene,camera);
-  controls.addEventListener('change',render);
+  if(!journey)controls.addEventListener('change',render);
   const home=new T.Vector3(.32,1.08,1.12).normalize();
   camera.position.copy(home);
   function fit(){
@@ -231,6 +243,38 @@ function mount(article){
     controls.update();render();
   }
   new ResizeObserver(fit).observe(stage);
+  if(journey){
+    canvas.tabIndex=-1;canvas.setAttribute('aria-hidden','true');controls.enabled=false;
+    const ingredients=new T.Group();scene.add(ingredients);
+    for(let i=0;i<12;i++){
+      const bit=orb(ingredients,0,0,0,.20,.19,.21,[beef,fish,golden][i%3]);
+      bit.rotation.y=i*2.4;
+    }
+    let last='';
+    stage.addEventListener('journey-pose',({detail:{kit,angle,burst}})=>{
+      const key=[kit,angle,burst].join('/');
+      if(last===key)return;
+      last=key;
+      const changed=active!==kit;
+      selectModel(kit);
+      floor.position.y=bounds.min.y-center.y-.015;
+      if(changed)fit();
+      const distance=camera.position.length();
+      camera.position.copy(home).applyAxisAngle(new T.Vector3(0,1,0),angle).multiplyScalar(distance);
+      ingredients.visible=burst>0&&burst<1;
+      ingredients.children.forEach((bit,i)=>{
+        const theta=i*2.399+burst*.7;
+        const radius=2.1+burst*3.6;
+        bit.position.set(Math.cos(theta)*radius,1.2*Math.sin(i*4.1)+burst,Math.sin(theta)*radius);
+        bit.scale.setScalar(.22*Math.sin(Math.PI*burst));
+        if(i%3===2)bit.material=kit==='gift'?prawn:golden;
+      });
+      controls.update();render();
+    });
+    fit();stage.classList.add('ready');stage.dispatchEvent(new Event('journey-ready'));
+    canvas.addEventListener('webglcontextlost',()=>{canvas.style.display='none';stage.classList.remove('ready')});
+    return;
+  }
   tools.querySelector('button').onclick=()=>{camera.position.copy(home);fit()};
   canvas.onkeydown=e=>{
     if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
@@ -243,4 +287,12 @@ function mount(article){
   fit();poster.hidden=true;tools.hidden=false;
   canvas.addEventListener('webglcontextlost',()=>{canvas.hidden=true;canvas.style.display='none';poster.hidden=false;tools.hidden=true});
 }
-document.querySelectorAll('.chapter').forEach(mount);
+mount(document.querySelector('.journey-object'),true);
+const nearby=new IntersectionObserver(entries=>{
+  for(const entry of entries){
+    if(!entry.isIntersecting)continue;
+    nearby.unobserve(entry.target);
+    mount(entry.target);
+  }
+},{rootMargin:'600px'});
+document.querySelectorAll('.chapter').forEach(article=>nearby.observe(article));
