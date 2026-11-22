@@ -69,3 +69,26 @@
 }
 .top .mainnav.open { top: 100%; }
 html { scroll-padding-top: 130px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+
+  :root { --project-entry: -12px; }
+  :root:has(.retail) { --project-entry: 12px; }
+
+  ::view-transition-group(root) { animation-duration: 420ms; }
+  ::view-transition-old(root) {
+    animation: project-leave 420ms ease-in-out both;
+  }
+  ::view-transition-new(root) {
+    animation: project-enter 420ms ease-in-out both;
+  }
+  @keyframes project-leave {
+    to { opacity: 0; transform: translateX(calc(-1 * var(--project-entry))); }
+  }
+  @keyframes project-enter {
+    from { opacity: 0; transform: translateX(var(--project-entry)); }
+  }
+
+  html.project-arrival body { animation: project-enter 320ms ease-out backwards; }
+}
