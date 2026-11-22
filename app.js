@@ -42,7 +42,7 @@
   const heroImage = () =>
     `<img src="assets/${gallery[frame].id}.webp" fetchpriority="high" alt="${txt(gallery[frame].alt || gallery[frame].name)}">`;
   function hero() {
-    return `<section class="hero" id="overview" aria-label="${t("Project overview", "項目總覽")}"><figure class="hero-media"><button id="hero-media" class="hero-room-photo" data-room="gallery" aria-haspopup="dialog" aria-label="${t("Explore this image in the tasting room","進入品鑑室探索這張概念圖")}">${heroImage()}</button></figure><div class="wrap hero-inner"><div class="hero-copy"><div class="eyebrow"><i class="signal" aria-hidden="true"></i>${t("Hong Kong Food Innovation", "香港食品創新企劃")}</div><h1>AFTER HOURS.<span>BETTER BITES.</span></h1><h2>${t("A New Generation of Hong Kong Beef Balls.", "新一代香港牛丸。")}</h2><p class="hero-sub" lang="zh-HK">${t("當傳統牛丸遇上香港夜生活，為經典食品創造新的可能。", "當傳統牛丸遇上香港夜生活，我們希望為經典食品創造新的可能性。")}</p><div class="buttons"><a class="btn primary" href="#products">${icon("skewer", 17)}${t("Explore Our Products", "探索創新產品")}</a><a class="btn" href="#lab">${icon("lab", 16)}${t("Discover the Ingredients", "走進食材實驗室")}</a></div><a class="model-link" href="#business">${t("Our Business Model", "瞭解商業模式")}</a></div></div><button type="button" class="gallery-caption room-entry" data-room="gallery" aria-haspopup="dialog"><span class="play-symbol" aria-hidden="true">▶</span>${t("Enter tasting room", "進入互動品鑑室")}</button><div class="gallery-info"><div class="gallery-credit"><strong id="visual-name">${txt(gallery[frame].name)}</strong><span class="imgnote">${AH.note()}</span></div><div class="gallery-ui" aria-label="${t("Concept gallery", "概念圖集")}"><span class="gallery-count" id="frame-count" aria-live="polite">0${frame + 1} / 05</span><button class="round" data-frame="-1" aria-label="${t("Previous concept visual", "上一張概念圖")}">${icon("prev", 14)}</button><button class="round" data-frame="1" aria-label="${t("Next concept visual", "下一張概念圖")}">${icon("next", 14)}</button></div></div></section>`;
+    return `<section class="hero" id="overview" aria-label="${t("Project overview", "項目總覽")}"><figure class="hero-media"><button id="hero-media" class="hero-room-photo" data-room="gallery" aria-haspopup="dialog" aria-label="${t("Explore this image in the tasting room", "進入品鑑室探索這張概念圖")}">${heroImage()}</button></figure><div class="wrap hero-inner"><div class="hero-copy"><div class="eyebrow"><i class="signal" aria-hidden="true"></i>${t("Hong Kong Food Innovation", "香港食品創新企劃")}</div><h1>AFTER HOURS.<span>BETTER BITES.</span></h1><h2>${t("A New Generation of Hong Kong Beef Balls.", "新一代香港牛丸。")}</h2><p class="hero-sub" lang="zh-HK">${t("當傳統牛丸遇上香港夜生活，為經典食品創造新的可能。", "當傳統牛丸遇上香港夜生活，我們希望為經典食品創造新的可能性。")}</p><div class="buttons"><a class="btn primary" href="#products">${icon("skewer", 17)}${t("Explore Our Products", "探索創新產品")}</a><a class="btn" href="#lab">${icon("lab", 16)}${t("Discover the Ingredients", "走進食材實驗室")}</a></div><a class="model-link" href="#business">${t("Our Business Model", "瞭解商業模式")}</a></div></div><button type="button" class="gallery-caption room-entry" data-room="gallery" aria-haspopup="dialog"><span class="play-symbol" aria-hidden="true">▶</span>${t("Enter tasting room", "進入互動品鑑室")}</button><div class="gallery-info"><div class="gallery-credit"><strong id="visual-name">${txt(gallery[frame].name)}</strong><span class="imgnote">${AH.note()}</span></div><div class="gallery-ui" aria-label="${t("Concept gallery", "概念圖集")}"><span class="gallery-count" id="frame-count" aria-live="polite">0${frame + 1} / 05</span><button class="round" data-frame="-1" aria-label="${t("Previous concept visual", "上一張概念圖")}">${icon("prev", 14)}</button><button class="round" data-frame="1" aria-label="${t("Next concept visual", "下一張概念圖")}">${icon("next", 14)}</button></div></div></section>`;
   }
   const projectLinks = [
     [
@@ -83,17 +83,83 @@
           `<button class="pill" data-filter="${k}" aria-pressed="${filter === k}">${k === "all" ? t("All concepts", "全部概念") : AH.series(k)}</button>`,
       )
       .join("");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let motionEnabled = !reducedMotion.matches;
+  let motionObserver;
+  const inView = new Set();
+  const captions = {
+    cheese: ["A molten centre.", "一口拉絲。"],
+    honey: ["A ribbon of honey.", "蜜汁緩緩掛上。"],
+    ginger: ["A ripple of warmth.", "一圈漣漪，一口暖湯。"],
+    tomato: ["A swirl of tomato.", "捲起一層番茄酸香。"],
+  };
   function productCards() {
     return products
       .filter((p) => filter === "all" || p.series === filter)
       .map(
-        (p) =>
-          `<button class="product-card fade-in" data-product="${p.id}" aria-label="${t("View details for", "查看詳情：")} ${txt(p.name)}"><div class="product-media"><img loading="lazy" src="assets/${p.id}.webp" alt="${txt(p.name)}"><span class="imgnote">${AH.note()}</span></div><div class="card-copy"><span class="tag ${p.series}">${AH.series(p.series)} ${t("Collection", "系列")}</span><h3>${txt(p.name)}</h3><p>${AH.lang === "en" ? p.name.zh : p.name.en}</p></div></button>`,
+        (p) => `
+      <article class="product-card food-stage food-${p.id}">
+        <div class="food-copy">
+          <span class="food-series">${AH.series(p.series)} ${t("Collection", "系列")}</span>
+          <h3>${t(...captions[p.id])}</h3>
+          <h4>${txt(p.name)}</h4>
+          <p>${txt(p.flavour)}</p>
+          <button class="btn" data-product="${p.id}">${t("Explore this concept", "探索這款牛丸")}</button>
+        </div>
+        <figure class="food-film">
+          <video muted loop playsinline preload="none" poster="assets/${p.id}.webp" data-film="assets/${p.id}-motion.mp4" aria-label="${txt(p.name)}"></video>
+          <figcaption>${AH.note()}</figcaption>
+        </figure>
+      </article>`,
       )
       .join("");
   }
+  function syncFilms() {
+    const control = document.getElementById("catalogue-motion");
+    if (control) {
+      control.textContent = motionEnabled
+        ? t("Pause motion", "暫停動態")
+        : t("Play motion", "播放動態");
+      control.setAttribute("aria-pressed", String(motionEnabled));
+    }
+    for (const film of document.querySelectorAll("[data-film]")) {
+      if (motionEnabled && !document.hidden && inView.has(film)) {
+        if (!film.getAttribute("src")) film.src = film.dataset.film;
+        film.muted = true;
+        film.play()?.catch(() => {});
+      } else if (!film.paused) film.pause();
+    }
+  }
+  function observeFilms() {
+    motionObserver?.disconnect();
+    inView.clear();
+    const films = document.querySelectorAll("[data-film]");
+    if ("IntersectionObserver" in window) {
+      motionObserver = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) inView.add(e.target);
+            else inView.delete(e.target);
+          }
+          syncFilms();
+        },
+        { threshold: 0.12 },
+      );
+      films.forEach((f) => motionObserver.observe(f));
+    } else films.forEach((f) => inView.add(f));
+    syncFilms();
+  }
+  reducedMotion.addEventListener("change", (e) => {
+    motionEnabled = !e.matches;
+    syncFilms();
+  });
+  document.addEventListener("visibilitychange", syncFilms);
   function catalogue() {
-    return `<section id="products" class="section"><div class="wrap"><div class="kicker">${t("Product innovation", "產品創新")}</div><div class="section-head"><h2>${t("Reinventing the<br>classic beef ball", "重新構想經典牛丸")}</h2><p>${t("From family tables to late-night counters. Four concepts rework the familiar Hong Kong bite through fillings, glazes, broth and a cup designed to go.", "從家庭餐桌到深夜吧枱。四款概念牛丸以創新內餡、醬汁、湯底與便攜杯裝，讓年輕消費者重新認識港式小食。")}</p></div><div class="toolbar"><div class="filters" id="product-filters">${filterButtons()}</div><button class="btn" data-open="compare">${icon("compare", 16)}${t("Compare products", "比較產品")}</button></div><div class="product-grid" id="product-grid">${productCards()}</div><p class="fine section-note">${t("Before Party explores shareable snacks for gatherings. After Party explores warm, refreshing late-night food. These collection names describe eating occasions. Neither collection prevents intoxication or treats a hangover.", "聚會前系列注重豐富口味與分享，聚會後系列注重温暖、清爽及方便食用。兩個系列僅代表消費場景，產品不能預防醉酒或治療宿醉。")}</p></div></section>`;
+    return `<section id="products" class="section catalogue"><div class="wrap">
+      <div class="catalogue-intro"><div class="kicker">${t("Product innovation", "產品創新")}</div><h2>${t("Reinventing the classic beef ball", "重新構想經典牛丸")}</h2>
+      <p>${t("Four ways to reimagine a Hong Kong favourite, from a molten cheese centre to a fragrant ginger broth.", "從拉絲芝士內餡到清香薑湯，以四種風味重新演繹港式牛丸。")}</p></div>
+      <div class="toolbar"><div class="filters" id="product-filters">${filterButtons()}</div><div class="actions"><button id="catalogue-motion" class="btn" type="button"></button><button class="btn" data-open="compare">${icon("compare", 16)}${t("Compare products", "比較產品")}</button></div></div>
+      <div class="food-stages" id="product-grid">${productCards()}</div><p class="fine section-note">${t("Before Party explores shareable snacks for gatherings. After Party explores warm, refreshing late-night food. These collection names describe eating occasions. Neither collection prevents intoxication or treats a hangover.", "聚會前系列注重豐富口味與分享，聚會後系列注重温暖、清爽及方便食用。兩個系列僅代表消費場景，產品不能預防醉酒或治療宿醉。")}</p></div></section>`;
   }
   function footer() {
     return `<footer class="foot"><div class="wrap"><details id="scientific" open><summary>${t("Important Scientific Disclaimer", "重要科學與食品安全聲明")}</summary><p class="fine">${t("This project explores innovative beef ball products inspired by social and nightlife consumption occasions. The products are not intended to prevent intoxication, accelerate alcohol metabolism, or treat hangovers.", "本項目旨在研究適合社交及夜間消費場景的創新牛丸食品。產品不用於預防醉酒、加速酒精代謝或治療宿醉。")}</p><p class="fine">${t("Recipes are in preliminary development. Formal food safety and shelf-life testing is pending. Account for milk and other allergens. Before sale, review Hong Kong food rules, verify ingredient evidence and avoid unsupported health claims.", "配方仍處於初步研究階段，產品尚未經過正式食品安全及貨架期測試。須考慮奶類等過敏原。銷售前需核對香港食品法規、驗證食材資料，並避免未經證實的醫療及功能性宣傳。")}</p><div class="source-links fine"><a target="_blank" rel="noopener" href="${AH.sources.alcohol}">${t("NIAAA · Hangovers", "NIAAA · 宿醉資料")}</a><a target="_blank" rel="noopener" href="${AH.sources.regulations}">${t("Hong Kong CFS · Food legislation", "香港食安中心 · 食品法規")}</a><a target="_blank" rel="noopener" href="${AH.sources.allergens}">${t("Hong Kong CFS · Allergens", "香港食安中心 · 致敏物")}</a><a target="_blank" rel="noopener" href="${AH.sources.grapefruit}">${t("FDA · Grapefruit interactions", "FDA · 西柚與藥物")}</a></div></details><div class="foot-bottom">${brand()}<p>${t("Independent student concept inspired by Tai Po Chun Hing. Unofficial portfolio. All products are under development and have not launched.", "醒酒牛丸創新企劃是以大埔振興牛丸為背景的學生獨立創作。本網站為非官方作品集，所有產品均處於概念研發階段，尚未上市。")}</p></div></div></footer>`;
@@ -174,6 +240,7 @@
       header() +
       `<main>${hero() + directory() + catalogue() + AH.labPage() + AH.businessPage()}</main>` +
       footer();
+    observeFilms();
     open.forEach((id) => {
       const d = document.getElementById(id);
       if (d) d.open = true;
@@ -247,10 +314,16 @@
       document.getElementById("frame-count").textContent = `0${frame + 1} / 05`;
       return;
     }
+    if (el.id === "catalogue-motion") {
+      motionEnabled = !motionEnabled;
+      syncFilms();
+      return;
+    }
     if (el.dataset.filter) {
       filter = el.dataset.filter;
       document.getElementById("product-filters").innerHTML = filterButtons();
       document.getElementById("product-grid").innerHTML = productCards();
+      observeFilms();
       document
         .querySelector(`[data-filter="${filter}"]`)
         .focus({ preventScroll: true });
