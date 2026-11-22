@@ -16,21 +16,40 @@ function texture(width,height,paint) {
   return result;
 }
 
-function food(base, fleck) {
-  const map=texture(256,128,ctx=>{
-    ctx.fillStyle=base;ctx.fillRect(0,0,256,128);
-    let seed=325;
-    const rand=()=>((seed=seed*16807%2147483647)/2147483647);
-    for(let i=0;i<3800;i++){
-      ctx.fillStyle=i%3?fleck:'#fff6db';
-      ctx.globalAlpha=.09+rand()*.22;
-      ctx.beginPath();ctx.ellipse(rand()*256,rand()*128,.3+rand()*2,.3+rand(),0,0,Math.PI*2);ctx.fill();
-    }
-  });
-  return finish('white',{map,bumpMap:map,bumpScale:.022,roughness:.48});
+// Surface colour comes from the kit photograph; lighting is calculated in 3D.
+const loader=new T.TextureLoader();
+async function food(name,roughness) {
+  const map=await loader.loadAsync(new URL(`./assets/surfaces/${name}.webp`,import.meta.url).href);
+  map.colorSpace=T.SRGBColorSpace;
+  map.wrapS=T.RepeatWrapping;
+  return new T.MeshPhysicalMaterial({map,bumpMap:map,bumpScale:.033,roughness,
+    clearcoat:.13,clearcoatRoughness:.38});
 }
-const beef=food('#ac8060','#593d28'), fish=food('#f2e3c9','#bbab86');
-const golden=food('#e5a640','#b27920'), sausage=food('#dd963c','#c98027'), prawn=food('#f1bd9f','#b77053');
+const [beef,fish,golden,sausage]=await Promise.all([
+  food('beef',.58),food('fish',.47),food('golden',.51),food('sausage',.35)
+]);
+const prawn=fish.clone();prawn.color.set('#f4bda8');
+
+const grain=texture(256,128,c=>{
+  c.fillStyle='#e6c991';c.fillRect(0,0,256,128);
+  for(let i=0;i<64;i++){
+    c.fillStyle=i%3?'#a987573d':'#fff3cd91';
+    c.fillRect(0,i*2,256,.5+Math.sin(i*3.7)*.4);
+  }
+});
+grain.wrapS=grain.wrapT=T.RepeatWrapping;
+bamboo.map=grain;bamboo.bumpMap=grain;bamboo.bumpScale=.012;
+const weave=texture(128,128,c=>{
+  c.fillStyle='#a7a7a7';c.fillRect(0,0,128,128);
+  for(let i=0;i<128;i+=4){
+    c.fillStyle='#737373';c.fillRect(i,0,1,128);
+    c.fillStyle='#dddddd';c.fillRect(0,i,128,1);
+  }
+});
+weave.wrapS=weave.wrapT=T.RepeatWrapping;weave.repeat.set(2,2);
+const cloth=finish('#8b1e2c',{bumpMap:weave,bumpScale:.018,roughness:.86});
+trayBlack.roughness=.28;
+gold.metalness=.68;gold.roughness=.32;
 
 function mesh(group,geometry,material,x,y,z) {
   const item=new T.Mesh(geometry,material);
@@ -38,7 +57,17 @@ function mesh(group,geometry,material,x,y,z) {
   return item;
 }
 function orb(group,x,y,z,rx,ry,rz,material) {
-  const item=mesh(group,sphere,material,x,y,z);
+  const skin=sphere.clone();
+  const vertices=skin.attributes.position;
+  const phase=x*7+z*13;
+  for(let i=0;i<vertices.count;i++){
+    const a=vertices.getX(i), b=vertices.getY(i), c=vertices.getZ(i);
+    const radius=1+.037*Math.sin(6*a+phase)*Math.sin(5*c+3*b)+.014*Math.cos(11*b-4*c+phase);
+    vertices.setXYZ(i,a*radius,b*radius,c*radius);
+  }
+  skin.computeVertexNormals();
+  const item=mesh(group,skin,material,x,y,z);
+  skin.rotateY(phase);
   item.scale.set(rx,ry,rz); return item;
 }
 function block(group,x,y,z,w,h,d,material,r=.05) {
@@ -70,6 +99,23 @@ function tray(g,w,d,mat) {
     block(g,0,.18,side*(d/2-.07),w-.12,.32,.12,mat);
   }
 }
+// Thin sealed edges enclose a slightly uneven, filled centre.
+function pouch(group,x,y,z,w,h,d,color) {
+  const foil=new T.MeshPhysicalMaterial({color,roughness:.38,metalness:.14,clearcoat:.55});
+  const skin=new T.PlaneGeometry(w,d,32,24);
+  skin.rotateX(-Math.PI/2);
+  const points=skin.attributes.position;
+  for(let i=0;i<points.count;i++){
+    const u=points.getX(i)/w+.5,v=points.getZ(i)/d+.5;
+    const edge=Math.min(u,v,1-u,1-v);
+    const fullness=T.MathUtils.smoothstep(edge,0,.17);
+    const crease=.07*Math.sin(23*u+8*v)*Math.sin(12*v)*fullness;
+    points.setY(i,h*(.06+.92*fullness+crease));
+  }
+  skin.computeVertexNormals();
+  mesh(group,skin,foil,x,y,z);
+  block(group,x,y,z,w,.025,d,foil,.035);
+}
 function skewerKit(g) {
   tray(g,5.9,4.6,trayBlack);
   for(let i=0;i<6;i++){
@@ -84,8 +130,8 @@ function skewerKit(g) {
   }
   for(const [i,label,color] of [[0,'蜜糖燒烤醬','#603421'],[1,'香辣孜然粉','#b57339']]){
     const x=-1.32+2.66*i;
-    block(g,x,.24,1.76,2.44,.16,.68,finish(color));
-    badge(g,label,color,'#fff0cc',x,.331,1.76,2.31,.58,true);
+    pouch(g,x,.16,1.76,2.44,.18,.68,color);
+    badge(g,label,color,'#fff0cc',x,.354,1.76,1.69,.35,true);
   }
   badge(g,'大埔振興','#272924','#f4ddaf',0,.16,2.314,2.4,.26);
 }
@@ -103,15 +149,27 @@ function reunionKit(g){
   }
   for(let i=0;i<2;i++){
     const x=1.05+i*1.05, color=i?'#e2b570':'#bc7535';
-    block(g,x,.41,-.55,.94,.29,1.87,finish(color),.12);
-    badge(g,i?'花膠雞湯':'濃縮沙爹',color,'#573321',x,.563,-.55,.82,.62,true);
-    mesh(g,new T.CylinderGeometry(.43,.38,.22,40),gold,x,.36,1);
-    badge(g,i?'沙茶':'XO','#533025','#ffdc93',x,.478,1,.58,.36,true);
+    pouch(g,x,.24,-.55,.94,.31,1.87,color);
+    badge(g,i?'花膠雞湯':'濃縮沙爹',color,'#573321',x,.572,-.55,.65,.59,true);
+    mesh(g,new T.CylinderGeometry(.40,.36,.20,48),finish('#532f20'),x,.35,1);
+    mesh(g,new T.CylinderGeometry(.43,.43,.075,64),gold,x,.454,1);
+    mesh(g,new T.CylinderGeometry(.36,.36,.018,48),finish('#49291e'),x,.498,1);
+    badge(g,i?'沙茶':'XO','#533025','#ffdc93',x,.511,1,.50,.30,true);
   }
   const bag=new T.Group();g.add(bag);
   bag.position.set(-.68,0,-2.52);
-  block(bag,0,1.12,0,3.7,2.44,1.12,red,.16);
+  block(bag,0,1.12,0,3.7,2.44,1.12,cloth,.16);
+  block(bag,0,2.35,0,3.42,.035,.075,gold);
+  for(const side of [-1,1]){
+    const seam=new T.CatmullRomCurve3([[-.52,.08],[-.52,2.15],[-.43,2.29],[.43,2.29],[.52,2.15],[.52,.08]].map(([z,y])=>new T.Vector3(side*1.85,y,z)));
+    mesh(bag,new T.TubeGeometry(seam,64,.021,8,false),gold,0,0,0);
+  }
   for(const z of [-.57,.57]){
+    for(const x of [-.79,.79]){
+      block(bag,x,2.04,z,.19,.48,.055,cloth);
+      const rivet=mesh(bag,new T.SphereGeometry(.055,16,10),gold,x,1.94,z*1.12);
+      rivet.scale.z=.34;
+    }
     const curve=new T.CatmullRomCurve3([[-.79,2.22],[-.66,2.97],[0,3.17],[.66,2.97],[.79,2.22]].map(([x,y])=>new T.Vector3(x,y,z)));
     mesh(bag,new T.TubeGeometry(curve,48,.076,10,false),gold,0,0,0);
   }
@@ -123,6 +181,8 @@ function mount(article){
   const stage=article.querySelector('.model-stage'), poster=stage.querySelector('img');
   let renderer;
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true});}catch{return;}
+  renderer.toneMapping=T.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.08;
   const scene=new T.Scene(), product=new T.Group();
   scene.add(product);
   (article.id==='bbq'?skewerKit:reunionKit)(product);
@@ -132,11 +192,24 @@ function mount(article){
   const bounds=new T.Box3().setFromObject(product);
   const center=bounds.getCenter(new T.Vector3());
   product.position.sub(center);
-  scene.add(new T.HemisphereLight(0xfff4df,0xada090,2.1));
-  const key=new T.DirectionalLight(0xfff1df,2.4);key.position.set(-4,9,5);
+  // Broad studio reflections define the tray lip, foil seals and satin handles.
+  const studio=texture(512,256,c=>{
+    c.fillStyle='#242327';c.fillRect(0,0,512,256);
+    c.fillStyle='#ffeacb';c.fillRect(50,25,104,64);
+    c.fillStyle='#eeeef5';c.fillRect(318,48,24,75);
+    c.fillStyle='#ad805d';c.fillRect(394,80,64,36);
+  });
+  studio.mapping=T.EquirectangularReflectionMapping;
+  scene.environment=studio;
+  scene.add(new T.HemisphereLight(0xffead6,0x695951,.76));
+  const key=new T.DirectionalLight(0xffe2bb,3.1);key.position.set(-5,7,3);
   key.castShadow=true;key.shadow.mapSize.set(1024,1024);
-  key.shadow.normalBias=.025;scene.add(key);
-  const rim=new T.DirectionalLight(0xffcfaa,1.1);rim.position.set(4,3,-4);scene.add(rim);
+  key.shadow.normalBias=.012;scene.add(key);
+  const rim=new T.DirectionalLight(0xffdbab,2.4);rim.position.set(3,4,-5);scene.add(rim);
+  const fill=new T.DirectionalLight(0xc9dcff,.61);fill.position.set(2,2,5);scene.add(fill);
+  const floor=new T.Mesh(new T.PlaneGeometry(30,30),new T.ShadowMaterial({opacity:.25,depthWrite:false}));
+  floor.rotation.x=-Math.PI/2;floor.position.y=bounds.min.y-center.y-.015;floor.receiveShadow=true;
+  scene.add(floor);
   const camera=new T.PerspectiveCamera(34,1,.1,120);
   const canvas=renderer.domElement;
   canvas.tabIndex=0;canvas.setAttribute('aria-label',poster.alt+' · 3D');
