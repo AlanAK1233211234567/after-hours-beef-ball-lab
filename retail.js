@@ -26,7 +26,7 @@
     const product=collections[id];
     return `<article id="${id}" class="chapter">
       <div class="chapter-heading"><small>${label}</small><h2>${name}</h2></div>
-      <figure><div class="studio"><video muted loop playsinline preload="none" poster="assets/${photo}.webp" aria-label="${name}" data-src="assets/${photo}-loop.mp4"></video>
+      <figure><div class="studio"><video muted loop playsinline preload="none" poster="assets/${photo}.webp" aria-label="${name}" data-src="assets/${photo}-cinema.mp4"></video>
       ${product.details.map(([x,y,title],i)=>`<button class="pin" style="left:${x}%;top:${y}%" data-detail="${i}" aria-label="${title}" aria-pressed="false">+</button>`).join('')}
       <button class="motion" aria-label="${t('播放動畫','Play motion')}">▶</button></div>
       <figcaption aria-live="polite"></figcaption></figure>
