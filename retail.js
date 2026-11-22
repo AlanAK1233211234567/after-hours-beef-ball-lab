@@ -25,12 +25,13 @@
   const card=(id,photo,name,label,desc,notes)=>{
     const product=collections[id];
     return `<article id="${id}" class="chapter">
-      <div class="chapter-heading"><small>${label}</small><h2>${name}</h2></div>
-      <figure><div class="studio"><video muted loop playsinline preload="none" poster="assets/${photo}.webp" aria-label="${name}" data-src="assets/${photo}-cinema.mp4"></video>
+      <div class="model-stage"><img class="model-poster" src="assets/${photo}.webp" alt="${name}"></div>
+      <div class="model-tools" hidden><span>${t('拖動旋轉 · 方向鍵微調','Drag to rotate · Arrow keys to turn')}</span><button type="button">${t('重設視角','Reset view')}</button></div>
+      <section class="product-info"><div class="chapter-heading"><small>${label}</small><h2>${name}</h2></div>
+      <div class="chapter-copy"><p>${desc}</p><div class="options" role="group" aria-label="${t('選擇規格','Choose a size')}">${product.variants.map(([title],i)=>`<button data-size="${i}" aria-pressed="${i===0}">${title}</button>`).join('')}</div><div class="spec" aria-live="polite"></div>${notes}<details><summary>${t('查看包裝攝影','Explore packaging photography')}</summary><figure><div class="studio"><video muted loop playsinline preload="none" poster="assets/${photo}.webp" aria-label="${name}" data-src="assets/${photo}-cinema.mp4"></video>
       ${product.details.map(([x,y,title],i)=>`<button class="pin" style="left:${x}%;top:${y}%" data-detail="${i}" aria-label="${title}" aria-pressed="false">+</button>`).join('')}
       <button class="motion" aria-label="${t('播放動畫','Play motion')}">▶</button></div>
-      <figcaption aria-live="polite"></figcaption></figure>
-      <div class="chapter-copy"><p>${desc}</p><div class="options" role="group" aria-label="${t('選擇規格','Choose a size')}">${product.variants.map(([title],i)=>`<button data-size="${i}" aria-pressed="${i===0}">${title}</button>`).join('')}</div><div class="spec" aria-live="polite"></div>${notes}</div></article>`;
+      <figcaption aria-live="polite"></figcaption></figure></details></div></section></article>`;
   };
   document.getElementById('retail').innerHTML=`
   <header><nav class="project-switch" aria-label="${t("切換企劃","Switch project")}"><form action="index.html" method="get"><button class="project-toggle" type="submit" role="switch" aria-checked="true" aria-label="${t("肉丸產品改善","Retail Collection")}"><span class="project-left">${t("醒酒牛丸","After Hours")}</span><span class="project-track" aria-hidden="true"></span><span class="project-right">${t("肉丸產品改善","Retail Collection")}</span></button></form></nav><div class="mast"><b>${t('大埔振興肉丸','Tai Po Chun Hing')}</b><nav><a href="#bbq">BBQ</a><a href="#gift">${t('團圓禮盒','Gift set')}</a><a href="#pilot">${t('試點計劃','Pilot')}</a><a href="?lang=${en?'zh':'en'}">${en?'繁體中文':'English'}</a></nav></div></header>
