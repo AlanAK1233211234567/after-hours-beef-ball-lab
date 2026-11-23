@@ -40,3 +40,5 @@
 }
 @media(max-width:740px){.chapter{grid-template-columns:1fr;gap:10px}.chapter-heading h2{margin-bottom:12px}.chapter-copy{max-width:none}}
 @media(prefers-reduced-motion:reduce){.studio video{transition:none}}
+
+#bbq .studio{aspect-ratio:1672/941}
