@@ -42,3 +42,5 @@
 @media(prefers-reduced-motion:reduce){.studio video{transition:none}}
 
 #bbq .studio{aspect-ratio:1672/941}
+
+#gift .studio{aspect-ratio:4/3}
