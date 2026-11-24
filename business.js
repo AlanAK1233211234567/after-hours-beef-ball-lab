@@ -236,17 +236,7 @@
     document.querySelector("#tasting .tool-content").innerHTML = tasting();
   };
   AH.businessPage = () =>
-    `<section class="section business" id="business"><div class="wrap"><div class="kicker">${t("Bar Collaboration", "酒吧合作")}</div><div class="section-head"><h2>${t("From traditional food<br>to nightlife culture", "從傳統食品走進夜生活")}</h2><p>${t("A proposed B2B2C pilot would connect Tai Po Chun Hing’s beef ball development with bars serving young adults. Bars could expand their snack menus and return direct tasting feedback to the maker.", "擬議的 B2B2C 試點將大埔振興的牛丸研發能力與面向年輕成年人的酒吧連接。酒吧可豐富小食選擇，並把顧客的試食意見帶回研發環節。")}</p></div><h3>${t("The proposed supply chain", "擬議合作流程")}</h3><div class="flow">${roles.map((r, i) => `<button data-role="${i}" aria-pressed="${role === i}">${icon(r[0], 25)}${txt(r[1])}</button>`).join("")}</div><div id="role-detail" class="flow-detail" aria-live="polite">${roleDetail()}</div><h3>${t("Pilot assumptions", "試點假設")}</h3><div class="assumptions">${[
-      ["4 " + t("beef balls", "粒牛丸"), t("Per serving", "每份份量")],
-      ["HK$38–48", t("Retail / serving", "每份零售價")],
-      ["HK$20–25", t("Wholesale / serving", "每份批發價")],
-      ["2–3", t("Proposed pilot bars", "擬議試點酒吧")],
-      ["4 " + t("weeks", "星期"), t("Pilot duration", "試點週期")],
-    ]
-      .map(([v, n]) => `<div><strong>${v}</strong><span>${n}</span></div>`)
-      .join(
-        "",
-      )}</div><p class="fine">${t("These are unverified planning assumptions. Partner agreements, actual costs and market demand remain to be validated.", "以上均為初步商業假設。合作協議、實際成本和市場需求仍待驗證。")}</p>${AH.toolbox("calculator", "calc", t("Interactive profit calculator", "互動利潤計算器"), calculator())}${AH.toolbox("tasting", "star", t("Test before we launch", "上市前試食驗證"), tasting())}</div></section>`;
+    `<section class="section business" id="business"><div class="wrap"><div class="kicker">${t("Bar Collaboration", "酒吧合作")}</div><div class="section-head"><h2>${t("From traditional food<br>to nightlife culture", "從傳統食品走進夜生活")}</h2><p>${t("A proposed B2B2C pilot would connect Tai Po Chun Hing’s beef ball development with bars serving young adults. Bars could expand their snack menus and return direct tasting feedback to the maker.", "擬議的 B2B2C 試點將大埔振興的牛丸研發能力與面向年輕成年人的酒吧連接。酒吧可豐富小食選擇，並把顧客的試食意見帶回研發環節。")}</p></div><h3>${t("The proposed supply chain", "擬議合作流程")}</h3><div class="flow">${roles.map((r, i) => `<button data-role="${i}" aria-pressed="${role === i}">${icon(r[0], 25)}${txt(r[1])}</button>`).join("")}</div><div id="role-detail" class="flow-detail" aria-live="polite">${roleDetail()}</div>${AH.toolbox("calculator", "calc", t("Interactive profit calculator", "互動利潤計算器"), calculator())}${AH.toolbox("tasting", "star", t("Test before we launch", "上市前試食驗證"), tasting())}</div></section>`;
   AH.businessClick = (el) => {
     if (el.dataset.role !== undefined) {
       role = +el.dataset.role;
